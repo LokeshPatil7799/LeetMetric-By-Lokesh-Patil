@@ -2,16 +2,12 @@ const express = require("express");
 
 const app = express();
 
-
-// ==============================
-// PORT
-// ==============================
-
-const PORT = process.env.PORT || 3000;
+const PORT =
+    process.env.PORT || 3000;
 
 
 // ==============================
-// SERVE FRONTEND FILES
+// SERVE FRONTEND
 // ==============================
 
 app.use(express.static(__dirname));
@@ -21,119 +17,158 @@ app.use(express.static(__dirname));
 // LEETCODE API
 // ==============================
 
-app.get("/api/leetcode/:username", async (req, res) => {
+app.get(
+    "/api/leetcode/:username",
+    async (req, res) => {
 
-    const username = req.params.username;
+        const username =
+            req.params.username;
 
-    try {
 
-        const query = `
-            query userProfile($username: String!) {
+        try {
 
-                matchedUser(username: $username) {
+            const query = `
 
-                    username
+                query userProfile(
+                    $username: String!
+                ) {
 
-                    profile {
+                    matchedUser(
+                        username: $username
+                    ) {
 
-                        realName
-                        userAvatar
-                        ranking
-                        reputation
-                        aboutMe
-                        school
-                        countryName
-                        company
+                        username
 
-                    }
+                        profile {
 
-                    submitStatsGlobal {
+                            realName
+                            userAvatar
+                            ranking
+                            reputation
+                            aboutMe
+                            school
+                            countryName
+                            company
 
-                        acSubmissionNum {
+                        }
 
-                            difficulty
-                            count
-                            submissions
+                        submitStatsGlobal {
+
+                            acSubmissionNum {
+
+                                difficulty
+                                count
+                                submissions
+
+                            }
 
                         }
 
                     }
 
-                }
+                    allQuestionsCount {
 
-            }
-        `;
+                        difficulty
+                        count
 
-
-        const response = await fetch(
-            "https://leetcode.com/graphql/",
-            {
-                method: "POST",
-
-                headers: {
-                    "Content-Type": "application/json",
-                    "User-Agent": "Mozilla/5.0"
-                },
-
-                body: JSON.stringify({
-
-                    query: query,
-
-                    variables: {
-                        username: username
                     }
 
-                })
+                }
+
+            `;
+
+
+            const response =
+                await fetch(
+                    "https://leetcode.com/graphql/",
+                    {
+
+                        method: "POST",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json",
+
+                            "User-Agent":
+                                "Mozilla/5.0"
+
+                        },
+
+                        body: JSON.stringify({
+
+                            query: query,
+
+                            variables: {
+
+                                username:
+                                    username
+
+                            }
+
+                        })
+
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    `LeetCode returned ${response.status}`
+                );
+
             }
-        );
 
 
-        if (!response.ok) {
+            const data =
+                await response.json();
 
-            throw new Error(
-                `LeetCode returned ${response.status}`
+
+            console.log(
+                "LeetCode Response:",
+                data
             );
+
+
+            res.json(data);
 
         }
 
 
-        const data = await response.json();
+        catch (error) {
+
+            console.error(
+                "Server Error:",
+                error
+            );
 
 
-        console.log(
-            "LeetCode Response:",
-            data
-        );
+            res.status(500).json({
 
+                error:
+                    "Unable to fetch LeetCode data"
 
-        res.json(data);
+            });
 
-    }
-
-
-    catch (error) {
-
-        console.error(
-            "Server Error:",
-            error
-        );
-
-
-        res.status(500).json({
-
-            error: "Unable to fetch LeetCode data"
-
-        });
+        }
 
     }
-
-});
+);
 
 
 // ==============================
 // START SERVER
 // ==============================
 
-app.listen(PORT, "0.0.0.0", () => {
-    console.log(`LeetMetric running on port ${PORT}`);
-});
+app.listen(
+    PORT,
+    "0.0.0.0",
+    () => {
+
+        console.log(
+            `LeetMetric running on port ${PORT}`
+        );
+
+    }
+);

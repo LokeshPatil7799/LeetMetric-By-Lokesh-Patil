@@ -6,14 +6,43 @@ document.addEventListener("DOMContentLoaded", function () {
     const usernameInput =
         document.getElementById("username");
 
-    const easyProgressCircle =
-        document.querySelector(".easy-progress");
 
-    const mediumProgressCircle =
-        document.querySelector(".medium-progress");
+    // ==============================
+    // ELEMENTS
+    // ==============================
 
-    const hardProgressCircle =
-        document.querySelector(".hard-progress");
+    const loading =
+        document.getElementById("loading");
+
+    const errorMessage =
+        document.getElementById("errorMessage");
+
+
+    const profileUsername =
+        document.getElementById("profileUsername");
+
+    const realName =
+        document.getElementById("realName");
+
+    const ranking =
+        document.getElementById("ranking");
+
+    const userAvatar =
+        document.getElementById("userAvatar");
+
+
+    const totalSolved =
+        document.getElementById("totalSolved");
+
+    const totalProblems =
+        document.getElementById("totalProblems");
+
+    const overallBar =
+        document.getElementById("overallBar");
+
+    const overallPercentage =
+        document.getElementById("overallPercentage");
+
 
     const easyLabel =
         document.getElementById("easy-label");
@@ -24,8 +53,58 @@ document.addEventListener("DOMContentLoaded", function () {
     const hardLabel =
         document.getElementById("hard-label");
 
-    const cardStatsContainer =
-        document.querySelector(".stats-cards");
+
+    const easySolved =
+        document.getElementById("easySolved");
+
+    const mediumSolved =
+        document.getElementById("mediumSolved");
+
+    const hardSolved =
+        document.getElementById("hardSolved");
+
+
+    const easyTotal =
+        document.getElementById("easyTotal");
+
+    const mediumTotal =
+        document.getElementById("mediumTotal");
+
+    const hardTotal =
+        document.getElementById("hardTotal");
+
+
+    const easyPercentage =
+        document.getElementById("easyPercentage");
+
+    const mediumPercentage =
+        document.getElementById("mediumPercentage");
+
+    const hardPercentage =
+        document.getElementById("hardPercentage");
+
+
+    const easyCircle =
+        document.getElementById("easyCircle");
+
+    const mediumCircle =
+        document.getElementById("mediumCircle");
+
+    const hardCircle =
+        document.getElementById("hardCircle");
+
+
+    const rankingCard =
+        document.getElementById("rankingCard");
+
+    const reputation =
+        document.getElementById("reputation");
+
+    const country =
+        document.getElementById("country");
+
+    const company =
+        document.getElementById("company");
 
 
     // ==============================
@@ -36,7 +115,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (username.trim() === "") {
 
-            alert("Username should not be empty.");
+            alert("Please enter a LeetCode username.");
 
             return false;
         }
@@ -48,13 +127,68 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (!regex.test(username)) {
 
-            alert("Invalid LeetCode username.");
+            alert(
+                "Invalid LeetCode username."
+            );
 
             return false;
         }
 
 
         return true;
+
+    }
+
+
+    // ==============================
+    // FORMAT NUMBER
+    // ==============================
+
+    function formatNumber(number) {
+
+        return Number(number || 0)
+            .toLocaleString();
+
+    }
+
+
+    // ==============================
+    // PERCENTAGE
+    // ==============================
+
+    function calculatePercentage(
+        solved,
+        total
+    ) {
+
+        if (!total) {
+
+            return 0;
+
+        }
+
+
+        return (
+            (solved / total) * 100
+        );
+
+    }
+
+
+    // ==============================
+    // UPDATE CIRCLE
+    // ==============================
+
+    function updateCircle(
+        circle,
+        percentage
+    ) {
+
+        circle.style.setProperty(
+            "--percentage",
+            `${percentage}%`
+        );
+
     }
 
 
@@ -66,24 +200,36 @@ document.addEventListener("DOMContentLoaded", function () {
 
         try {
 
+            // Loading
+
+            loading.classList.remove("hidden");
+
+            errorMessage.classList.add("hidden");
+
             searchButton.textContent =
                 "Searching...";
 
             searchButton.disabled = true;
 
 
-            // Call our Node.js server
+            // Reset
 
-            const response = await fetch(
-                `/api/leetcode/${username}`
-            );
+            profileUsername.textContent =
+                "Loading...";
+
+
+            const response =
+                await fetch(
+                    `/api/leetcode/${username}`
+                );
 
 
             if (!response.ok) {
 
                 throw new Error(
-                    "Unable to fetch user data"
+                    "Unable to fetch user data."
                 );
+
             }
 
 
@@ -97,7 +243,9 @@ document.addEventListener("DOMContentLoaded", function () {
             );
 
 
-            // Get user
+            // ==============================
+            // USER
+            // ==============================
 
             const user =
                 data?.data?.matchedUser;
@@ -105,23 +253,86 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (!user) {
 
-                cardStatsContainer.innerHTML = `
-                    <p class="error">
-                        User not found.
-                    </p>
-                `;
+                throw new Error(
+                    "User not found."
+                );
 
-                return;
             }
 
 
             // ==============================
-            // SUBMISSION STATS
+            // PROFILE
+            // ==============================
+
+            const profile =
+                user.profile || {};
+
+
+            profileUsername.textContent =
+                user.username;
+
+
+            realName.textContent =
+                profile.realName ||
+                "LeetCode Developer";
+
+
+            ranking.textContent =
+                profile.ranking
+                    ? `#${formatNumber(profile.ranking)}`
+                    : "N/A";
+
+
+            rankingCard.textContent =
+                profile.ranking
+                    ? `#${formatNumber(profile.ranking)}`
+                    : "N/A";
+
+
+            reputation.textContent =
+                formatNumber(
+                    profile.reputation
+                );
+
+
+            country.textContent =
+                profile.countryName ||
+                "Not specified";
+
+
+            company.textContent =
+                profile.company ||
+                "Not specified";
+
+
+            // Avatar
+
+            if (profile.userAvatar) {
+
+                userAvatar.innerHTML = `
+                    <img
+                        src="${profile.userAvatar}"
+                        alt="User avatar"
+                        style="
+                            width:100%;
+                            height:100%;
+                            object-fit:cover;
+                            border-radius:50%;
+                        "
+                    >
+                `;
+
+            }
+
+
+            // ==============================
+            // SOLVED STATS
             // ==============================
 
             const stats =
-                user.submitStatsGlobal
-                    .acSubmissionNum;
+                user
+                    ?.submitStatsGlobal
+                    ?.acSubmissionNum || [];
 
 
             const easyData =
@@ -157,116 +368,174 @@ document.addEventListener("DOMContentLoaded", function () {
                 hardData?.count || 0;
 
 
+            // ==============================
+            // TOTAL PROBLEMS
+            // ==============================
+
+            const questionCounts =
+                data?.data?.allQuestionsCount || [];
+
+
+            const easyTotalValue =
+                questionCounts.find(
+                    item =>
+                        item.difficulty === "Easy"
+                )?.count || 0;
+
+
+            const mediumTotalValue =
+                questionCounts.find(
+                    item =>
+                        item.difficulty === "Medium"
+                )?.count || 0;
+
+
+            const hardTotalValue =
+                questionCounts.find(
+                    item =>
+                        item.difficulty === "Hard"
+                )?.count || 0;
+
+
             const total =
                 easy + medium + hard;
 
 
-            // ==============================
-            // DISPLAY NUMBERS
-            // ==============================
-
-            easyLabel.textContent = easy;
-
-            mediumLabel.textContent = medium;
-
-            hardLabel.textContent = hard;
+            const totalAvailable =
+                easyTotalValue +
+                mediumTotalValue +
+                hardTotalValue;
 
 
             // ==============================
-            // PROGRESS CIRCLES
+            // PERCENTAGES
             // ==============================
 
-            const easyPercentage =
-                Math.min(easy, 100);
-
-
-            const mediumPercentage =
-                Math.min(medium, 100);
-
-
-            const hardPercentage =
-                Math.min(hard * 2, 100);
-
-
-            easyProgressCircle.style
-                .setProperty(
-                    "--percentage",
-                    easyPercentage + "%"
+            const easyPercent =
+                calculatePercentage(
+                    easy,
+                    easyTotalValue
                 );
 
 
-            mediumProgressCircle.style
-                .setProperty(
-                    "--percentage",
-                    mediumPercentage + "%"
+            const mediumPercent =
+                calculatePercentage(
+                    medium,
+                    mediumTotalValue
                 );
 
 
-            hardProgressCircle.style
-                .setProperty(
-                    "--percentage",
-                    hardPercentage + "%"
+            const hardPercent =
+                calculatePercentage(
+                    hard,
+                    hardTotalValue
+                );
+
+
+            const overallPercent =
+                calculatePercentage(
+                    total,
+                    totalAvailable
                 );
 
 
             // ==============================
-            // PROFILE
+            // TOTAL
             // ==============================
 
-            const profile =
-                user.profile;
+            totalSolved.textContent =
+                formatNumber(total);
+
+
+            totalProblems.textContent =
+                ` / ${formatNumber(totalAvailable)}`;
+
+
+            overallPercentage.textContent =
+                `${overallPercent.toFixed(1)}%`;
+
+
+            overallBar.style.width =
+                `${Math.min(overallPercent, 100)}%`;
 
 
             // ==============================
-            // CARDS
+            // EASY
             // ==============================
 
-            cardStatsContainer.innerHTML = `
-
-                <div class="stat-card">
-
-                    <h3>Username</h3>
-
-                    <p>
-                        ${user.username}
-                    </p>
-
-                </div>
+            easyLabel.textContent =
+                formatNumber(easy);
 
 
-                <div class="stat-card">
-
-                    <h3>Total Solved</h3>
-
-                    <p>
-                        ${total}
-                    </p>
-
-                </div>
+            easySolved.textContent =
+                formatNumber(easy);
 
 
-                <div class="stat-card">
-
-                    <h3>Ranking</h3>
-
-                    <p>
-                        ${profile.ranking || "N/A"}
-                    </p>
-
-                </div>
+            easyTotal.textContent =
+                ` / ${formatNumber(easyTotalValue)}`;
 
 
-                <div class="stat-card">
+            easyPercentage.textContent =
+                `${easyPercent.toFixed(1)}%`;
 
-                    <h3>Reputation</h3>
 
-                    <p>
-                        ${profile.reputation || 0}
-                    </p>
+            updateCircle(
+                easyCircle,
+                easyPercent
+            );
 
-                </div>
 
-            `;
+            // ==============================
+            // MEDIUM
+            // ==============================
+
+            mediumLabel.textContent =
+                formatNumber(medium);
+
+
+            mediumSolved.textContent =
+                formatNumber(medium);
+
+
+            mediumTotal.textContent =
+                ` / ${formatNumber(mediumTotalValue)}`;
+
+
+            mediumPercentage.textContent =
+                `${mediumPercent.toFixed(1)}%`;
+
+
+            updateCircle(
+                mediumCircle,
+                mediumPercent
+            );
+
+
+            // ==============================
+            // HARD
+            // ==============================
+
+            hardLabel.textContent =
+                formatNumber(hard);
+
+
+            hardSolved.textContent =
+                formatNumber(hard);
+
+
+            hardTotal.textContent =
+                ` / ${formatNumber(hardTotalValue)}`;
+
+
+            hardPercentage.textContent =
+                `${hardPercent.toFixed(1)}%`;
+
+
+            updateCircle(
+                hardCircle,
+                hardPercent
+            );
+
 
         }
 
@@ -279,19 +548,33 @@ document.addEventListener("DOMContentLoaded", function () {
             );
 
 
-            cardStatsContainer.innerHTML = `
-                <p class="error">
-                    Unable to load user data.
-                </p>
-            `;
+            errorMessage.textContent =
+                error.message === "User not found."
+                    ? "User not found. Please check the username."
+                    : "Unable to load LeetCode data.";
+
+
+            errorMessage.classList.remove(
+                "hidden"
+            );
+
+
+            profileUsername.textContent =
+                "Search a user";
 
         }
 
 
         finally {
 
+            loading.classList.add(
+                "hidden"
+            );
+
+
             searchButton.textContent =
                 "Search";
+
 
             searchButton.disabled =
                 false;
@@ -313,15 +596,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 usernameInput.value.trim();
 
 
-            console.log(
-                "Entered Username:",
-                username
-            );
-
-
             if (!validateUsername(username)) {
 
                 return;
+
             }
 
 
@@ -333,7 +611,9 @@ document.addEventListener("DOMContentLoaded", function () {
     );
 
 
+    // ==============================
     // ENTER KEY
+    // ==============================
 
     usernameInput.addEventListener(
         "keypress",

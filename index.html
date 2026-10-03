@@ -5,27 +5,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>LeetMetric</title>
+    <title>LeetMetric | LeetCode Progress Tracker</title>
 
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <div class="container">
+    <!-- Background coding decoration -->
+    <div class="code-bg code-1">{ }</div>
+    <div class="code-bg code-2">&lt;/&gt;</div>
+    <div class="code-bg code-3">101010</div>
+    <div class="code-bg code-4">[ ]</div>
 
-        <h1>LeetMetric</h1>
+    <main class="container">
 
-        <div class="user-container">
+        <!-- HEADER -->
 
-            <p>Enter your LeetCode username:</p>
+        <header class="header">
+
+            <div class="logo">
+                <span class="logo-icon">&lt;/&gt;</span>
+                <div>
+                    <h1>LeetMetric</h1>
+                    <p>LeetCode Progress Tracker</p>
+                </div>
+            </div>
+
+        </header>
+
+
+        <!-- SEARCH -->
+
+        <section class="search-section">
+
+            <p class="search-title">
+                Track your LeetCode journey
+            </p>
 
             <div class="user-input-container">
+
+                <span class="search-icon">⌕</span>
 
                 <input
                     type="text"
                     id="username"
-                    placeholder="Enter username"
+                    placeholder="Enter LeetCode username"
+                    autocomplete="off"
                 >
 
                 <button id="searchButton">
@@ -34,49 +60,364 @@
 
             </div>
 
+            <p class="hint">
+                Enter a valid LeetCode username to view statistics.
+            </p>
+
+        </section>
+
+
+        <!-- LOADING -->
+
+        <div id="loading" class="loading hidden">
+
+            <div class="loader"></div>
+
+            <p>Fetching LeetCode statistics...</p>
+
         </div>
 
 
-        <div class="stats-container">
+        <!-- DASHBOARD -->
 
-            <div class="progress">
+        <section class="dashboard">
 
-                <div class="circle easy-progress">
 
-                    <span id="easy-label">0</span>
+            <!-- PROFILE -->
 
-                    <p>Easy</p>
+            <div class="profile-card">
+
+                <div class="profile-left">
+
+                    <div class="avatar" id="userAvatar">
+                        &lt;/&gt;
+                    </div>
+
+                    <div>
+
+                        <p class="small-title">
+                            LEETCODE PROFILE
+                        </p>
+
+                        <h2 id="profileUsername">
+                            Search a user
+                        </h2>
+
+                        <p id="realName">
+                            Your statistics will appear here
+                        </p>
+
+                    </div>
 
                 </div>
 
 
-                <div class="circle medium-progress">
+                <div class="profile-rank">
 
-                    <span id="medium-label">0</span>
+                    <span>Ranking</span>
 
-                    <p>Medium</p>
-
-                </div>
-
-
-                <div class="circle hard-progress">
-
-                    <span id="hard-label">0</span>
-
-                    <p>Hard</p>
+                    <strong id="ranking">
+                        —
+                    </strong>
 
                 </div>
 
             </div>
 
 
-            <div class="stats-cards">
+            <!-- TOTAL PROGRESS -->
+
+            <div class="total-card">
+
+                <div class="section-heading">
+
+                    <div>
+                        <span class="small-title">
+                            OVERALL PROGRESS
+                        </span>
+
+                        <h2>Problems Solved</h2>
+                    </div>
+
+                    <div class="total-number">
+
+                        <strong id="totalSolved">
+                            0
+                        </strong>
+
+                        <span id="totalProblems">
+                            / 0
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="overall-progress">
+
+                    <div
+                        id="overallBar"
+                        class="overall-bar"
+                    ></div>
+
+                </div>
+
+
+                <div class="percentage-text">
+
+                    <span>Progress</span>
+
+                    <strong id="overallPercentage">
+                        0%
+                    </strong>
+
+                </div>
 
             </div>
 
-        </div>
 
-    </div>
+            <!-- DIFFICULTY -->
+
+            <div class="difficulty-grid">
+
+
+                <!-- EASY -->
+
+                <div class="difficulty-card easy-card">
+
+                    <div class="difficulty-header">
+
+                        <span class="difficulty-dot easy-dot"></span>
+
+                        <span>Easy</span>
+
+                    </div>
+
+                    <div class="difficulty-progress">
+
+                        <div
+                            class="circle easy-progress"
+                            id="easyCircle"
+                        >
+
+                            <div class="circle-inner">
+
+                                <strong id="easy-label">
+                                    0
+                                </strong>
+
+                                <span>solved</span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="difficulty-info">
+
+                        <strong id="easySolved">
+                            0
+                        </strong>
+
+                        <span id="easyTotal">
+                            / 0
+                        </span>
+
+                    </div>
+
+                    <p id="easyPercentage">
+                        0%
+                    </p>
+
+                </div>
+
+
+                <!-- MEDIUM -->
+
+                <div class="difficulty-card medium-card">
+
+                    <div class="difficulty-header">
+
+                        <span class="difficulty-dot medium-dot"></span>
+
+                        <span>Medium</span>
+
+                    </div>
+
+                    <div class="difficulty-progress">
+
+                        <div
+                            class="circle medium-progress"
+                            id="mediumCircle"
+                        >
+
+                            <div class="circle-inner">
+
+                                <strong id="medium-label">
+                                    0
+                                </strong>
+
+                                <span>solved</span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="difficulty-info">
+
+                        <strong id="mediumSolved">
+                            0
+                        </strong>
+
+                        <span id="mediumTotal">
+                            / 0
+                        </span>
+
+                    </div>
+
+                    <p id="mediumPercentage">
+                        0%
+                    </p>
+
+                </div>
+
+
+                <!-- HARD -->
+
+                <div class="difficulty-card hard-card">
+
+                    <div class="difficulty-header">
+
+                        <span class="difficulty-dot hard-dot"></span>
+
+                        <span>Hard</span>
+
+                    </div>
+
+                    <div class="difficulty-progress">
+
+                        <div
+                            class="circle hard-progress"
+                            id="hardCircle"
+                        >
+
+                            <div class="circle-inner">
+
+                                <strong id="hard-label">
+                                    0
+                                </strong>
+
+                                <span>solved</span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="difficulty-info">
+
+                        <strong id="hardSolved">
+                            0
+                        </strong>
+
+                        <span id="hardTotal">
+                            / 0
+                        </span>
+
+                    </div>
+
+                    <p id="hardPercentage">
+                        0%
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- EXTRA STATS -->
+
+            <div class="stats-grid">
+
+                <div class="stat-card">
+
+                    <span class="stat-icon">🏆</span>
+
+                    <div>
+                        <p>Ranking</p>
+                        <strong id="rankingCard">—</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <span class="stat-icon">⭐</span>
+
+                    <div>
+                        <p>Reputation</p>
+                        <strong id="reputation">0</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <span class="stat-icon">🌎</span>
+
+                    <div>
+                        <p>Country</p>
+                        <strong id="country">—</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <span class="stat-icon">💻</span>
+
+                    <div>
+                        <p>Company</p>
+                        <strong id="company">—</strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ERROR -->
+
+            <div
+                id="errorMessage"
+                class="error hidden"
+            >
+                Unable to load user data.
+            </div>
+
+
+        </section>
+
+
+        <footer>
+
+            <p>
+                LeetMetric
+                <span>•</span>
+                Track. Solve. Improve.
+            </p>
+
+        </footer>
+
+    </main>
 
 
     <script src="script.js"></script>
