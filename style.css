@@ -961,25 +961,40 @@ body {
 /* FOOTER */
 /* ============================= */
 
+/* ============================= */
+/* FOOTER */
+/* ============================= */
+
 footer {
-
     text-align: center;
-
     color: #555b63;
-
     font-size: 0.75rem;
-
-    margin-top: 30px;
-
+    margin-top: 40px;
+    padding: 25px 0 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
-
 
 footer span {
-
     color: var(--orange);
-
+    margin: 0 5px;
 }
 
+.footer-credit {
+    margin-top: 8px;
+    color: #737b85;
+}
+
+.footer-credit a {
+    color: var(--orange);
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.25s ease;
+}
+
+.footer-credit a:hover {
+    color: #ffbd5c;
+    text-decoration: underline;
+}
 
 /* ============================= */
 /* MOBILE */
