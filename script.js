@@ -122,7 +122,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
         const regex =
-            /^[a-zA-Z0-9-]{1,15}$/;
+            /^[a-zA-Z0-9_-]{1,15}$/;
 
 
         if (!regex.test(username)) {
